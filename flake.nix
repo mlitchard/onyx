@@ -1,5 +1,5 @@
 {
-  description = "srid/haskell-template: Nix template for Haskell projects";
+  description = "srid/onyx: Nix template for Haskell projects";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -27,7 +27,7 @@
           imports = [
             inputs.nixpkgs-140774-workaround.haskellFlakeProjectModules.default
           ];
-          # packages.haskell-template.root = ./.;  # Auto-discovered by haskell-flake
+          # packages.onyx.root = ./.;  # Auto-discovered by haskell-flake
           overrides = self: super: { };
           devShell = {
             tools = hp: {
@@ -83,14 +83,14 @@
           run = {
             description = "Run the project with ghcid auto-recompile";
             exec = ''
-              ghcid -c "cabal repl exe:haskell-template" --warnings -T :main
+              ghcid -c "cabal repl exe:onyx" --warnings -T :main
             '';
             category = "Primary";
           };
         };
 
         # Default package.
-        packages.default = self'.packages.main-haskell-template;
+        packages.default = self'.packages.main-onyx;
 
         # Default shell.
         devShells.default =
