@@ -51,10 +51,11 @@ instance ToJSON Command where
 instance FromJSON Command where
   parseJSON = withObject "command" $ \o -> do
     command <- o .: "command"
-    parseResourceTransaction command 
+    parseMove command -- <|> parseResourceTransaction command 
       <|> parseZap command 
       <|> parseLook command 
-      <|> parseMove command
+      <|> parseResourceTransaction command
+     -- <|> parseMove command
 
 parseMove :: Value -> Parser Command 
 parseMove (Object obj) = do 
@@ -73,9 +74,7 @@ parseLook (String "look")= pure Look
 parseLook _ = fail "malformed look" 
 
 parseResourceTransaction :: Value -> Parser Command 
-parseResourceTransaction (Object obj) = do
-  rt <- obj .: "resourcetransaction"
-  Transaction <$> parseJSON rt
+parseResourceTransaction rt@(Object obj) = Transaction <$> parseJSON rt
 parseResourceTransaction _ = fail "not a ResourceTransaction"
 -- Validated Player command
 newtype VAC = VAC Command deriving stock (Eq,Ord,Show)

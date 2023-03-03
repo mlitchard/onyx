@@ -14,6 +14,7 @@ instance Show ResourceName where
   show SpecialK = "specialk"
   show InterzoneSpecial = "interzonespecial"
   show BabyBlue = "babyblue"
+
 instance ToJSON ResourceName where
   toJSON = genericToJSON defaultOptions { 
     constructorTagModifier = map toLower
@@ -26,9 +27,9 @@ instance FromJSON ResourceName where
 
 instance ToText ResourceName where 
   toText :: ResourceName -> Text
-  toText SpecialK = "specialk"
-  toText InterzoneSpecial = "Interzone Special"
-  toText BabyBlue         = "Baby Blue"
+  toText SpecialK         = "specialk"
+  toText InterzoneSpecial = "interzonespecial"
+  toText BabyBlue         = "babyblue"
 
 data Transaction = Buy | Sell
   deriving stock (Generic,Ord,Eq,Enum,Bounded)
@@ -75,8 +76,7 @@ instance ToJSON ResourceTransaction where
 instance FromJSON ResourceTransaction where 
   parseJSON = withObject "Resource Transaction" $ \o -> do 
     res :: Object <- o .: "resourcetransaction"
-    -- transaction   <- res .: "transaction"
-    let transaction = Buy
+    transaction   <- res .: "transaction" 
     resourceName  <- res .: "resource"
     amount        <- res .: "amount" 
     pure $ MkResourceTransaction {..}

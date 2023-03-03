@@ -103,7 +103,7 @@ library
     import: shared  
     hs-source-dirs:   src
     
-    exposed-modules: Agent, Core.Core, Planet, Protocol.Protocol, Resource
+    exposed-modules: Agent, Core.Core, Planet, Protocol, Protocol.Protocol, Resource
 
 executable onyx-exe 
   import:  shared
