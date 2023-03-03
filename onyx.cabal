@@ -64,6 +64,8 @@ common shared
     PolyKinds
     PostfixOperators
     RankNTypes
+    RecordWildCards
+    RecursiveDo
     ScopedTypeVariables
     StandaloneDeriving
     StandaloneKindSignatures
@@ -76,21 +78,33 @@ common shared
   build-depends:
     , aeson
     , async
-    , base          >=4.13.0.0 && <4.18.0.0.0
+    , base          >= 4.13.0.0 && <4.18.0.0.0
+    , conduit       ==  1.3.4.3
+    , conduit-extra ==  1.3.6
     , data-default
     , directory
     , filepath
     , mtl
     , optics-core
     , profunctors
-    , relude        >=1.0
+    , reactive-banana ==  1.3.2.0
+    , relude          >=  1.0
     , shower
+    , stm             ==  2.5.0.2
+    , stm-conduit
     , time
     , with-utf8
+    , word8           ==  0.1.3
 
   hs-source-dirs:     src
   default-language:   Haskell2010
 
-executable onyx
+library 
+    import: shared  
+    hs-source-dirs:   src
+    
+    exposed-modules: Agent, Core.Core, Planet, Protocol.Protocol, Resource
+
+executable onyx-exe 
   import:  shared
   main-is: Main.hs
