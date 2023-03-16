@@ -1,11 +1,9 @@
 {-# LANGUAGE InstanceSigs #-}
-module Resource where
+module Domain.Resources where
 
 import Data.Aeson
 import Data.Char
-import qualified Data.Text as Text 
 import Text.Show (Show (..))
-import Relude.String.Conversion
 
 data ResourceName = SpecialK | InterzoneSpecial | BabyBlue 
   deriving stock (Generic,Ord,Eq,Enum,Bounded)
@@ -67,12 +65,7 @@ instance ToJSON ResourceTransaction where
              , ("amount" :: Key)      .= amount
              ]
     ]
-    where 
-      t :: Text 
-      t = (Text.filter (not . isSpace) $ (Text.toLower . toText) transaction)
-      r :: Text 
-      r = (Text.filter (not . isSpace) $ (Text.toLower . toText) resourceName)
-
+    
 instance FromJSON ResourceTransaction where 
   parseJSON = withObject "Resource Transaction" $ \o -> do 
     res :: Object <- o .: "resourcetransaction"

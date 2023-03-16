@@ -1,10 +1,9 @@
-module Core.Core where
-
+module Domain.Game where
 
 import Control.Concurrent.STM.TChan (TChan)
-import Planet ( PlanetMap )
+import Domain.Planet ( PlanetMap )
 import Reactive.Banana.Frameworks ( AddHandler, MomentIO, fromAddHandler, reactimate )
-import Agent (AgentMap)
+import Domain.Agent (AgentMap)
 import Protocol.Protocol ( UAC, InitMaps, VAC )
 import Reactive.Banana
 

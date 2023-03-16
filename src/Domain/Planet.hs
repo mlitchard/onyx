@@ -1,5 +1,5 @@
 {-# LANGUAGE InstanceSigs #-}
-module Planet where
+module Domain.Planet where
 
 import Data.Char ( toLower )
 import Data.Aeson
@@ -7,9 +7,7 @@ import Data.Aeson
       defaultOptions,
       genericToJSON,
       FromJSON(parseJSON),
-      Options(sumEncoding, constructorTagModifier,
-              allNullaryToStringTag),
-      SumEncoding(..),
+      Options(constructorTagModifier),
       ToJSON(toJSON), Value )
 import Data.Aeson.Types (Parser)
 
@@ -33,5 +31,11 @@ instance FromJSON PlanetName where
   parseJSON = genericParseJSON defaultOptions { 
     constructorTagModifier = map toLower
   }
+
+data Planet 
+  = Planet 
+    { residents :: ![AID]
+    , description :: ToText
+    , }
 
 newtype PlanetMap = PlanetMap (Map PlanetName Text) deriving stock (Show)

@@ -1,11 +1,11 @@
 module Protocol.Protocol where
 
-import Agent (AgentMap, LocationMap)
+import Domain.Agent (AgentMap, LocationMap)
 import Data.Aeson
 import Data.Aeson.Types
 import Data.Char
-import Planet (PlanetName, PlanetMap)
-import Resource (ResourceTransaction)
+import Domain.Planet (PlanetName, PlanetMap)
+import Domain.Resources (ResourceTransaction)
 
 data ChatEmote 
   = Roar 
@@ -61,7 +61,7 @@ parseMove :: Value -> Parser Command
 parseMove (Object obj) = do 
   move <- obj .: "move"
   Move <$> parseJSON move   
-parseMove val = fail "not a move"
+parseMove val = fail ("not a move " <> (show val))
 
 parseZap :: Value -> Parser Command 
 parseZap (Object obj) = do 
