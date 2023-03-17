@@ -1,18 +1,28 @@
 module Domain.Game where
 
 import Control.Concurrent.STM.TChan (TChan)
-import Domain.Planet ( PlanetMap )
+import Data.UUID 
+import Planet ( LocationMap, PlanetMap )
 import Reactive.Banana.Frameworks ( AddHandler, MomentIO, fromAddHandler, reactimate )
-import Domain.Agent (AgentMap)
+import Agent (AgentMap)
 import Protocol.Protocol ( UAC, InitMaps, VAC )
 import Reactive.Banana
 
-data GameState = GameState !AgentMap !PlanetMap deriving stock (Show)
+newtype GameID = GameID UUID deriving Show 
+data GameState 
+  = GameState 
+      { _gameId       :: GameID
+      , _agentMap     :: !AgentMap
+      , _planetMap    :: !PlanetMap
+      , _locationMap  :: !LocationMap
+      , _gameIsOver   :: Bool
+      } deriving stock (Show)
+
 data Parameters = Parameters
-  { input        :: AddHandler [UAC] -- All user input per tick
-  , output       :: TChan GameState  -- 
-  , initMaps     :: InitMaps         -- provides initial states
-  , tick         :: AddHandler ()    -- provides heartbeat
+  { _input        :: AddHandler [UAC] -- All user input per tick
+  , _output       :: TChan GameState  -- 
+  , _initMaps     :: InitMaps         -- provides initial states
+  , _tick         :: AddHandler ()    -- provides heartbeat
   }
 
 makeNetworkDescription :: Parameters -> MomentIO ()

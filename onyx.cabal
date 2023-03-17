@@ -116,18 +116,26 @@ library
     import: shared  
     hs-source-dirs:   src
     
-    exposed-modules:  Domain.Agent
+    exposed-modules:  Agent
+                    , Domain.Agent
                     , Domain.Game
                     , Domain.Planet
                     , Domain.Resources
                     , Protocol
                     , Protocol.Protocol
-                    , Server 
-                    , Server.Server
+                    , AppServer 
+                    , GameServer.Server
 
 executable onyx-exe 
   import:  shared
   hs-source-dirs: src 
   main-is: Main.hs
+  other-modules:  AppServer
+                  , Agent
+                  , Domain.Agent
+                  , Domain.Planet
+                  , Domain.Resources
+                  , Protocol
+                  , Protocol.Protocol
 
 

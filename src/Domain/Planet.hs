@@ -10,6 +10,9 @@ import Data.Aeson
       Options(constructorTagModifier),
       ToJSON(toJSON), Value )
 import Data.Aeson.Types (Parser)
+import Agent
+
+newtype LocationMap = LocationMap (Map AID PlanetName) deriving stock (Show)
 
 data PlanetName
   = Vulcan
@@ -34,8 +37,8 @@ instance FromJSON PlanetName where
 
 data Planet 
   = Planet 
-    { residents :: ![AID]
-    , description :: ToText
-    , }
+    { residents   :: ![AID]
+    , description :: Text
+    }
 
 newtype PlanetMap = PlanetMap (Map PlanetName Text) deriving stock (Show)

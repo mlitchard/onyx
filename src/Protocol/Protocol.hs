@@ -1,10 +1,10 @@
 module Protocol.Protocol where
 
-import Domain.Agent (AgentMap, LocationMap)
+import Agent (AgentMap)
 import Data.Aeson
 import Data.Aeson.Types
 import Data.Char
-import Domain.Planet (PlanetName, PlanetMap)
+import Domain.Planet (LocationMap, PlanetName, PlanetMap)
 import Domain.Resources (ResourceTransaction)
 
 data ChatEmote 
