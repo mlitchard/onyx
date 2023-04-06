@@ -19,7 +19,7 @@ instance ToJSON LoginForm where
 
       jPasswordField :: (Key,Value)
       jPasswordField = "password" .= toJSON passwordField
-{-
+
 instance FromJSON Account where
   parseJSON = withObject "Account" $ \o -> do
     name <- o .: "name"
@@ -45,4 +45,4 @@ instance FromJSON User where
     res <- o .: "user"
     user <- parseJSON res
     pure $ MkUser {..} 
--}
+

@@ -66,10 +66,12 @@ instance ToLogStr LogMessage where
 type API = "onyx" :> WebSocketPending     
     :<|> Raw
 
+type ServantAppM = AppM (Headers '[ Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] LogMessage)
+
 loginHandler :: CookieSettings
              -> JWTSettings
              -> LoginForm
-             -> AppM (Headers '[ Header "Set-Cookie" SetCookie, Header "Set-Cookie" SetCookie] LogMessage)
+             -> ServantAppM
 loginHandler cookieSettings jwtSettings form@(MkLoginForm {..}) = do
   config     <- asks _getConfig
   accounts   <- asks _dummyAccounts
@@ -87,24 +89,30 @@ loginHandler cookieSettings jwtSettings form@(MkLoginForm {..}) = do
 --       liftIO $ pushLogStrLn logset $ toLogStr logMsg
       throwError err401
     Just usr -> do
-      mApplyCookies <- lift $ liftIO $ SAS.acceptLogin cookieSettings jwtSettings usr
+      mApplyCookies <- liftIO $ SAS.acceptLogin cookieSettings jwtSettings usr
       case mApplyCookies of
         Nothing           -> do
   --        liftIO $ pushLogStrLn logset $ toLogStr logMsg
           throwError err401
-        Just applyCookies -> do
-{-
-          loggedInMap <- get _loggedIn
-          logStatusMsg <- case (updateMap nameField loggedInMap) of
-	                    Left msg -> pure msg
-			    Right uMap -> do
-			                   put uMap
-					   pure (nameField <> "authenticated")
--}                          
-          liftIO $ pushLogStrLn logset 
-	    $ toLogStr (logMsg{message = logStatusMsg})
-          pure $ applyCookies $ toLogStr (logMsg{message = logStatusMsg})
-	  where logStatusMsg = "placeholder"
+        Just applyCookies -> 
+	  doIt 	  
+	  where 
+	    doIt :: ServantAppM
+	    doIt = do
+              gs <- gets
+	      let loggedInMap = _loggedIn gs
+              logStatusMsg <- case (updateMap nameField loggedInMap) of
+	        Left msg -> pure msg
+		Right uMap -> do
+			        put $ gs{ _loggedIn = uMap }
+				pure (nameField <> "authenticated")
+                          
+              liftIO $ pushLogStrLn logset 
+	        $ toLogStr (logMsg{message = logStatusMsg})
+              pure $ applyCookies $ logMsg{message = logStatusMsg}
+
+
+
 
 updateMap :: Text -> LoggedInMap -> Either Text LoggedInMap
 updateMap name lmap = case (lookup name lmap) of
