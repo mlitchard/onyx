@@ -1,5 +1,6 @@
 module LoginForm where
 
+import Account
 import Data.Aeson
 import Data.Text
 
@@ -20,29 +21,9 @@ instance ToJSON LoginForm where
       jPasswordField :: (Key,Value)
       jPasswordField = "password" .= toJSON passwordField
 
-instance FromJSON Account where
-  parseJSON = withObject "Account" $ \o -> do
-    name <- o .: "name"
-    password <- o .: "password"
-    pure $ MkAccount {..}
-
-instance ToJSON Admin where
-  toJSON (MkAdmin {..}) = 
-    object ["admin" .= toJSON admin]
-
-instance FromJSON Admin where
-  parseJSON = withObject "Admin" $ \o -> do
-    res <- o .: "admin"
-    admin <- parseJSON res
-    pure $ MkAdmin {..}
-
-instance ToJSON User where
-  toJSON (MkUser {..}) = 
-    object ["user" .= toJSON user]
-
-instance FromJSON User where
-  parseJSON = withObject "User" $ \o -> do
-    res <- o .: "user"
-    user <- parseJSON res
-    pure $ MkUser {..} 
-
+instance FromJSON LoginForm where
+  parseJSON = withObject "LoginForm" $ \o -> do
+    res <- o .: "login"
+    nameField <- res .: "name"
+    passwordField <- res .: "password"
+    pure $ MkLoginForm {..}

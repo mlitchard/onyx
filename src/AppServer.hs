@@ -95,17 +95,17 @@ loginHandler cookieSettings jwtSettings form@(MkLoginForm {..}) = do
   --        liftIO $ pushLogStrLn logset $ toLogStr logMsg
           throwError err401
         Just applyCookies -> 
-	  doIt 	  
-	  where 
-	    doIt :: ServantAppM
-	    doIt = do
-              gs <- gets
-	      let loggedInMap = _loggedIn gs
+          doIt 
+          where 
+            doIt :: ServantAppM
+            doIt = do
+              gs <- get
+              let loggedInMap = _loggedIn gs
               logStatusMsg <- case (updateMap nameField loggedInMap) of
-	        Left msg -> pure msg
-		Right uMap -> do
-			        put $ gs{ _loggedIn = uMap }
-				pure (nameField <> "authenticated")
+                Left msg -> pure msg
+                Right uMap -> do
+                  put $ gs{ _loggedIn = uMap }
+                  pure (nameField <> "authenticated")
                           
               liftIO $ pushLogStrLn logset 
 	        $ toLogStr (logMsg{message = logStatusMsg})
@@ -116,7 +116,7 @@ loginHandler cookieSettings jwtSettings form@(MkLoginForm {..}) = do
 
 updateMap :: Text -> LoggedInMap -> Either Text LoggedInMap
 updateMap name lmap = case (lookup name lmap) of
-  Just name -> Left $ (name <> "is already authenticated")
+  Just _ -> Left $ (name <> "is already authenticated")
   Nothing   -> Right $ insert name (name <> " successfully authenticated") lmap
 
 validateAdmin :: SiteConfig -> LoginForm -> Maybe Authenticated
