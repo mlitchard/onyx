@@ -2,13 +2,13 @@ module Domain.Game where
 
 import Control.Concurrent.STM.TChan (TChan)
 import Data.UUID 
-import Planet ( LocationMap, PlanetMap )
+import Domain.Planet ( LocationMap, PlanetMap )
 import Reactive.Banana.Frameworks ( AddHandler, MomentIO, fromAddHandler, reactimate )
 import Agent (AgentMap)
 import Protocol.Protocol ( UAC, InitMaps, VAC )
 import Reactive.Banana
 
-newtype GameID = GameID UUID deriving Show 
+newtype GameID = GameID UUID deriving stock Show 
 data GameState 
   = GameState 
       { _gameId       :: GameID
@@ -27,8 +27,8 @@ data Parameters = Parameters
 
 makeNetworkDescription :: Parameters -> MomentIO ()
 makeNetworkDescription params = mdo
-    _eInput <- fromAddHandler (input params)
-    eTick <- fromAddHandler (tick params)
+    _eInput <- fromAddHandler (_input params)
+    eTick <- fromAddHandler (_tick params)
 
 
     -- Buffer things
