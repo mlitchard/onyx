@@ -1,6 +1,6 @@
 module AppServer where 
 
-import Prelude hiding (StateT, ReaterT,lift,gets)
+import Prelude hiding (StateT, ReaderT,lift,gets)
 import           Account
 import           Control.Monad.IO.Class (liftIO)
 import           Control.Monad.Reader
